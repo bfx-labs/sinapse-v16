@@ -256,12 +256,73 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 fixtures = [
-     {
+    {
         "dt": "Client Script"
     },
     {
         "dt": "Role Profile"
     },
+
+    {
+        "dt": "Custom Field",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    # Existing custom fields
+                    "Patient Appointment-custom_patient_type",
+                    "Patient Encounter-custom_blood_sugar",
+
+                    # GST - Item
+                    "Item-custom_cgst_",
+                    "Item-custom_sgst_",
+                    "Item-custom_igst_",
+                    "Item-custom_discount",
+
+                    # GST - Sales Invoice
+                    "Sales Invoice-custom_cgst",
+                    "Sales Invoice-custom_sgst",
+                    "Sales Invoice-custom_total_gst",
+
+                    # GST - Sales Invoice Item
+                    "Sales Invoice Item-custom_cgst_",
+                    "Sales Invoice Item-custom_sgst_",
+                    "Sales Invoice Item-custom_cgst_amount",
+                    "Sales Invoice Item-custom_sgst_amount",
+                    "Sales Invoice Item-custom_total_gst",
+
+                    # GST - Purchase Invoice
+                    "Purchase Invoice-custom_total_gst",
+                    "Purchase Invoice Item-custom_gst",
+
+                    # Purchase calculation dependencies
+                    "Purchase Invoice-custom_buy_net_total_",
+                    "Purchase Invoice-custom_buy_total",
+                    "Purchase Invoice-custom_total_discount",
+                    "Purchase Invoice Item-custom_buy_amount",
+                    "Purchase Invoice Item-custom_buy_discount_",
+                    "Purchase Invoice Item-custom_buy_net_amount_",
+                    "Purchase Invoice Item-custom_buy_rate",
+
+                    # GST - Stock Entry
+                    "Stock Entry-custom_gst",
+                    "Stock Entry Detail-custom_gst",
+
+                    # Stock calculation dependencies
+                    "Stock Entry-custom_discount_",
+                    "Stock Entry-custom_rounding_off",
+                    "Stock Entry-custom_total_",
+                    "Stock Entry-custom_total_net_amount_",
+                    "Stock Entry Detail-custom_dis_",
+                    "Stock Entry Detail-custom_net_amount_",
+                    "Stock Entry Detail-custom_rate",
+                    "Stock Entry Detail-custom_total_amount"
+                ]
+            ]
+        ]
+    },
+
     {
         "dt": "Workspace"
     },
@@ -280,7 +341,7 @@ fixtures = [
                     "Lab",
                     "Pharmacy",
                     "Nurse",
-                    "Practitioner",
+                    "Practitioner"
                 ]
             ]
         ]
