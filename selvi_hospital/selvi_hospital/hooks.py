@@ -351,7 +351,23 @@ fixtures = [
     },
     {
         "dt": "Custom DocPerm"
-    }
+    },
+    {
+        "dt": "Print Format",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Bill Format 2",
+                    "Bill Summary  Print",
+                    "Bill",
+                    "Bill New",
+                    "Sales Invoice Bill"
+            ]
+        ]
+    ]
+},
 ]
 
 
