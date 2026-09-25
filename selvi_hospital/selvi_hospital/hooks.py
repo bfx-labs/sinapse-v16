@@ -256,6 +256,12 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 fixtures = [
+     {
+        "dt": "Client Script"
+    },
+    {
+        "dt": "Role Profile"
+    },
     {
         "dt": "Workspace"
     },
@@ -280,63 +286,51 @@ fixtures = [
         ]
     },
     {
-        "dt": "Desktop Icon",
-        "filters": [
-            [
-                "name",
-                "in",
-                [
-                    "Healthcare",
-                    "Outpatient",
-                    "Reception",
-                    "Inpatient",
-                    "Users",
-                    "Lab",
-                    "Pharmacy"
-                ]
-            ]
-        ]
+        "dt": "Desktop Icon"
+    },
+    {
+        "dt": "Custom DocPerm"
     }
 ]
 
 
 # Recent Patient Encounter customizations
-fixtures.append({
-    "dt": "Property Setter",
-    "filters": [
-        ["name", "in", [
+# fixtures.append({
+#     "dt": "Property Setter",
+#     "filters": [
+#         ["name", "in", [
  
-           "Patient Encounter-title-in_list_view",
-            "Patient Encounter-practitioner_name-in_list_view",
-            "Patient Encounter-encounter_date-in_list_view",
-            "Patient Encounter-patient_name-in_list_view",
-            "Patient Encounter-main-title_field"
-        ]]
-    ]
-})
+#            "Patient Encounter-title-in_list_view",
+#             "Patient Encounter-practitioner_name-in_list_view",
+#             "Patient Encounter-encounter_date-in_list_view",
+#             "Patient Encounter-patient_name-in_list_view",
+#             "Patient Encounter-main-title_field"
+#         ]]
+#     ]
+# })
 
-fixtures.append({
-    "dt": "Property Setter",
-    "filters": [
-        ["name", "in", [
-            "Patient Encounter-title-in_list_view",
-            "Patient Encounter-practitioner_name-in_list_view",
-            "Patient Encounter-encounter_date-in_list_view",
-            "Patient Encounter-patient_name-in_list_view",
-            "Patient Encounter-main-title_field",
-            "Patient Appointment-title-in_list_view",
-            "Patient Appointment-practitioner_name-in_list_view",
-            "Patient Appointment-main-title_field"
-        ]]
-    ]
-})
+# fixtures.append({
+#     "dt": "Property Setter",
+#     "filters": [
+#         ["name", "in", [
+#             "Patient Encounter-title-in_list_view",
+#             "Patient Encounter-practitioner_name-in_list_view",
+#             "Patient Encounter-encounter_date-in_list_view",
+#             "Patient Encounter-patient_name-in_list_view",
+#             "Patient Encounter-main-title_field",
+#             "Patient Appointment-title-in_list_view",
+#             "Patient Appointment-practitioner_name-in_list_view",
+#             "Patient Appointment-main-title_field"
+#         ]]
+#     ]
+# })
 
-fixtures.append({
-    "dt": "Custom Field",
-    "filters": [
-        ["name", "in", [
-            "Patient Appointment-custom_patient_type",
-            "Patient Encounter-custom_blood_sugar"
-        ]]
-    ]
-})
+# fixtures.append({
+#     "dt": "Custom Field",
+#     "filters": [
+#         ["name", "in", [
+#             "Patient Appointment-custom_patient_type",
+#             "Patient Encounter-custom_blood_sugar"
+#         ]]
+#     ]
+# })
