@@ -278,6 +278,9 @@ fixtures = [
         "dt": "Property Setter"
     },
     {
+        "dt": "Notification"
+    },
+    {
         "dt": "Workspace Sidebar",
         "filters": [
             [
