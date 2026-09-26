@@ -281,6 +281,9 @@ fixtures = [
         "dt": "Notification"
     },
     {
+        "dt": "Server Script"
+    },
+    {
         "dt": "Workspace Sidebar",
         "filters": [
             [
