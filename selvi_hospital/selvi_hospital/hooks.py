@@ -353,6 +353,12 @@ fixtures = [
         "dt": "Custom DocPerm"
     },
     {
+        "dt": "Custom Field"
+    },
+    {
+        "dt": "Property Setter"
+    },
+    {
         "dt": "Print Format",
         "filters": [
             [
