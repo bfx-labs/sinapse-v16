@@ -4,6 +4,13 @@ app_publisher = "CubaAR"
 app_description = "Customizations for Selvi Hospital"
 app_email = "cubaar29@gmail.com"
 app_license = "mit"
+app_logo_url = "/assets/selvi_hospital/images/sinapse-logo.png"
+app_include_js = [
+    "sinapse-sidebar.bundle.js"
+]
+doctype_js = {
+    "Clinical Procedure": "public/js/clinical_procedure.js",
+}
 
 # Apps
 # ------------------
