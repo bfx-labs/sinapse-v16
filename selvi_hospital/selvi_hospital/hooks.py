@@ -4,9 +4,6 @@ app_publisher = "CubaAR"
 app_description = "Customizations for Selvi Hospital"
 app_email = "cubaar29@gmail.com"
 app_license = "mit"
-doctype_js = {
-    "Clinical Procedure": "public/js/clinical_procedure.js",
-}
 
 # Apps
 # ------------------
@@ -259,67 +256,84 @@ doctype_js = {
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 fixtures = [
-    {
-        "dt": "Client Script"
-    },
-    {
-        "dt": "Role Profile"
-    },
-    {
-        "dt": "Workspace"
-    },
-        {
-        "dt": "Desktop Icon"
-    },
-    {
-        "dt": "Custom DocPerm"
-    },
-    {
-        "dt": "Custom Field"
-    },
-    {
-        "dt": "Property Setter"
-    },
-    {
-        "dt": "Notification"
-    },
-    {
-        "dt": "Server Script"
-    },
+    {"dt": "Client Script"},
+    {"dt": "Role Profile"},
+    {"dt": "Custom DocPerm"},
+    {"dt": "Notification"},
+    {"dt": "Server Script"},
+    {"dt": "Workspace"},
     {
         "dt": "Workspace Sidebar",
         "filters": [
-            [
-                "name",
-                "in",
-                [
-                    "Healthcare",
-                    "Outpatient",
-                    "Reception",
-                    "Inpatient",
-                    "Users",
-                    "Lab",
-                    "Pharmacy",
-                    "Nurse",
-                    "Practitioner"
-                ]
-            ]
+            ["name", "in", [
+                "Healthcare",
+                "Outpatient",
+                "Reception",
+                "Inpatient",
+                "Users",
+                "Lab",
+                "Pharmacy",
+                "Nurse",
+                "Practitioner",
+            ]]
+        ]
+    },
+    {
+        "dt": "Desktop Icon",
+        "filters": [
+            ["name", "in", [
+                "Healthcare",
+                "Outpatient",
+                "Reception",
+                "Inpatient",
+                "Users",
+                "Lab",
+                "Pharmacy",
+            ]]
         ]
     },
     {
         "dt": "Print Format",
         "filters": [
-            [
-                "name",
-                "in",
-                [
-                    "Bill Format 2",
-                    "Bill Summary  Print",
-                    "Bill",
-                    "Bill New",
-                    "Sales Invoice Bill"
-            ]
+            ["name", "in", [
+                "Bill Format 2",
+                "Bill Summary  Print",
+                "Bill",
+                "Bill New",
+                "Sales Invoice Bill",
+            ]]
         ]
-    ]
-},
+    },
+    {"dt": "Property Setter"},
+    {"dt": "Custom Field"},
 ]
+# Custom JavaScript for DocTypes
+doctype_js = {
+    'Sales Invoice': 'public/js/sales_invoice.js',
+    'IP Bill Summary': 'public/js/ip_bill_summary.js',
+    'Inpatient Record': 'public/js/inpatient_record_ip_bill_summary.js',
+    'Clinical Procedure': 'public/js/clinical_procedure.js',
+}
+
+# Custom document events
+doc_events = {
+    'Sales Invoice': {
+        'before_validate': 'selvi_hospital.sales_invoice.set_inpatient_practitioner',
+        'validate': 'selvi_hospital.sales_invoice.calculate_advance_balance',
+        'on_submit': 'selvi_hospital.ip_bill_summary.sync_from_sales_invoice',
+        'on_update_after_submit': 'selvi_hospital.ip_bill_summary.sync_from_sales_invoice',
+    },
+    'IP Bill Summary': {
+        'validate': [
+            'selvi_hospital.ip_bill_summary.calculate_total_charges',
+            'selvi_hospital.ip_bill_import.validate_source_invoice_import',
+        ],
+        'before_submit': 'selvi_hospital.ip_bill_summary.validate_before_submit',
+        'on_update': 'selvi_hospital.ip_bill_summary.sync_sales_invoice_link',
+        'on_update_after_submit': 'selvi_hospital.ip_bill_summary.sync_sales_invoice_link',
+    },
+    'Payment Entry': {
+        'on_submit': 'selvi_hospital.ip_bill_summary.sync_from_payment_entry',
+        'on_cancel': 'selvi_hospital.ip_bill_summary.sync_from_payment_entry',
+    },
+}

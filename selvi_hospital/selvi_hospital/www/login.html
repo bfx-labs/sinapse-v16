@@ -86,13 +86,13 @@
 
 {% block head_include %}
 {{ include_style('login.bundle.css') }}
-{% endblock %}
 
 <style>
-	.page-card-subtitle {
-		display: none !important;
-	}
+.page-card-subtitle {
+    display: none !important;
+}
 </style>
+{% endblock %}
 
 {% macro logo_section(title=null, subtitle=null) %}
 <div class="page-card-head">
@@ -102,6 +102,9 @@
 		<h4>{{ _(title) }}</h4>
 		{% else %}
 		<h4>{{ _('Login to Sinapse') }}</h4>
+		{% endif %}
+		{% if subtitle %}
+		<p class="page-card-subtitle">{{ _(subtitle) }}</p>
 		{% endif %}
 	</div>
 </div>
