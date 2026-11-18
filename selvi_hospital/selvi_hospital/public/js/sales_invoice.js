@@ -1,4 +1,4 @@
-async function update_advance_balance(frm) {
+﻿async function update_advance_balance(frm) {
     let allocatedAdvance = 0;
     let fullAdvance = 0;
     const paymentEntries = new Set();
@@ -107,5 +107,75 @@ frappe.ui.form.on("Sales Invoice", {
     },
     custom_inpatient_record(frm) {
         sync_inpatient_practitioner(frm);
+    }
+});
+
+
+// Fetch MRP and expiry from the selected Batch
+frappe.ui.form.on("Sales Invoice Item", {
+    batch_no: async function(frm, cdt, cdn) {
+        const row = locals[cdt][cdn];
+
+        if (!row.batch_no) return;
+
+        const response = await frappe.db.get_value(
+            "Batch",
+            row.batch_no,
+            ["item", "custom_mrp", "expiry_date"]
+        );
+
+        const batch = response.message;
+
+        if (!batch) return;
+
+        if (batch.item !== row.item_code) {
+            frappe.msgprint(
+                __("Selected Batch does not belong to this Item.")
+            );
+            return;
+        }
+
+        await frappe.model.set_value(
+            cdt, cdn, "rate", batch.custom_mrp || 0
+        );
+
+        await frappe.model.set_value(
+            cdt, cdn, "custom_expiry_date",
+            batch.expiry_date || null
+        );
+    }
+});
+
+// OP: 5% discount | IP: 0% discount
+async function apply_op_ip_discount(frm) {
+    const discount = frm.doc.custom_inpatient_record ? 0 : 5;
+
+    for (const row of (frm.doc.items || [])) {
+        if (flt(row.discount_percentage) !== discount) {
+            await frappe.model.set_value(
+                row.doctype,
+                row.name,
+                "discount_percentage",
+                discount
+            );
+        }
+    }
+}
+
+frappe.ui.form.on("Sales Invoice", {
+    refresh(frm) {
+        apply_op_ip_discount(frm);
+    },
+    custom_inpatient_record(frm) {
+        apply_op_ip_discount(frm);
+    },
+    items_add(frm) {
+        apply_op_ip_discount(frm);
+    }
+});
+
+frappe.ui.form.on("Sales Invoice Item", {
+    item_code(frm) {
+        apply_op_ip_discount(frm);
     }
 });

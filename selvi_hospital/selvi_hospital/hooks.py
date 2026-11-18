@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/selvi_hospital/css/selvi_hospital.css"
-# app_include_js = "/assets/selvi_hospital/js/selvi_hospital.js"
+app_include_js = "/assets/selvi_hospital/js/ip_bill_summary.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/selvi_hospital/css/selvi_hospital.css"
@@ -139,6 +139,7 @@ app_license = "mit"
 # Hook on document methods and events
 
 # doc_events = {
+
 # 	"*": {
 # 		"on_update": "method",
 # 		"on_cancel": "method",
@@ -259,7 +260,10 @@ fixtures = [
     {"dt": "Client Script"},
     {"dt": "Role Profile"},
     {"dt": "Custom DocPerm"},
-    {"dt": "Notification"},
+    {
+        "dt": "Notification",
+        "filters": [["is_standard", "=", 0]]
+    },
     {"dt": "Server Script"},
     {"dt": "Workspace"},
     {
@@ -313,13 +317,32 @@ doctype_js = {
     'IP Bill Summary': 'public/js/ip_bill_summary.js',
     'Inpatient Record': 'public/js/inpatient_record_ip_bill_summary.js',
     'Clinical Procedure': 'public/js/clinical_procedure.js',
+    'Patient Encounter': 'public/js/patient_encounter.js',
+    'Purchase Receipt': 'public/js/purchase_receipt.js',
+    'Purchase Invoice': 'public/js/purchase_invoice.js',
 }
 
 # Custom document events
 doc_events = {
+    "Patient Appointment": {
+        "before_validate": "selvi_hospital.patient_appointment.set_visit_case_type",
+    },
+    "Purchase Invoice": {
+        "validate": "selvi_hospital.purchase_invoice.calculate_purchase_invoice_totals",
+    },
+    "Patient Encounter": {
+        "on_update": "selvi_hospital.follow_up.sync_patient_follow_up",
+    },
     'Sales Invoice': {
         'before_validate': 'selvi_hospital.sales_invoice.set_inpatient_practitioner',
-        'validate': 'selvi_hospital.sales_invoice.calculate_advance_balance',
+        'validate': [
+            'selvi_hospital.purchase_receipt.fetch_sales_invoice_batch_mrp_expiry',
+        ],
+        'before_save': [
+            'selvi_hospital.purchase_receipt.apply_op_ip_discount',
+            'selvi_hospital.sales_invoice.calculate_advance_balance',
+        ],
+        'after_insert': 'selvi_hospital.ip_bill_summary.link_consolidated_invoice',
         'on_submit': 'selvi_hospital.ip_bill_summary.sync_from_sales_invoice',
         'on_update_after_submit': 'selvi_hospital.ip_bill_summary.sync_from_sales_invoice',
     },
@@ -337,3 +360,84 @@ doc_events = {
         'on_cancel': 'selvi_hospital.ip_bill_summary.sync_from_payment_entry',
     },
 }
+
+# Purchase Receipt: save MRP and expiry in the generated Batch
+doc_events.setdefault("Purchase Receipt", {})["validate"] = (
+    "selvi_hospital.purchase_receipt.fetch_batch_mrp_expiry"
+)
+
+doc_events.setdefault("Purchase Receipt", {})["on_submit"] = (
+    "selvi_hospital.purchase_receipt.update_generated_batch_details"
+)
+
+# Keep Item Available Batches synchronized with Batch records
+doc_events.setdefault("Batch", {}).update({
+    "after_insert": "selvi_hospital.purchase_receipt.sync_item_batches_on_update",
+    "on_update": "selvi_hospital.purchase_receipt.sync_item_batches_on_update",
+})
+
+
+# Automatic Item Group shelf-life defaults and Batch expiry calculation
+doc_events.setdefault("Item", {})["before_validate"] = (
+    "selvi_hospital.purchase_receipt.set_item_shelf_life_from_group"
+)
+
+doc_events.setdefault("Batch", {})["before_validate"] = (
+    "selvi_hospital.purchase_receipt.set_batch_expiry_from_shelf_life"
+)
+
+
+# Automatically populate Item CGST and SGST from the selected tax template.
+_item_before_validate = doc_events.setdefault("Item", {}).get("before_validate")
+
+if not _item_before_validate:
+    doc_events["Item"]["before_validate"] = [
+        "selvi_hospital.purchase_receipt.set_item_gst_from_tax_template"
+    ]
+elif isinstance(_item_before_validate, str):
+    doc_events["Item"]["before_validate"] = [
+        _item_before_validate,
+        "selvi_hospital.purchase_receipt.set_item_gst_from_tax_template"
+    ]
+else:
+    _item_before_validate.append(
+        "selvi_hospital.purchase_receipt.set_item_gst_from_tax_template"
+    )
+
+
+
+# Automatically set Item Dosage Form from Item Group.
+_item_events = doc_events.setdefault("Item", {})
+_before_validate = _item_events.get("before_validate")
+
+if not _before_validate:
+    _item_events["before_validate"] = [
+        "selvi_hospital.purchase_receipt.set_item_dosage_form_from_group"
+    ]
+elif isinstance(_before_validate, str):
+    _item_events["before_validate"] = [
+        _before_validate,
+        "selvi_hospital.purchase_receipt.set_item_dosage_form_from_group"
+    ]
+elif "selvi_hospital.purchase_receipt.set_item_dosage_form_from_group" not in _before_validate:
+    _before_validate.append(
+        "selvi_hospital.purchase_receipt.set_item_dosage_form_from_group"
+    )
+
+
+doctype_js["Medicine Return"] = "public/js/medicine_return.js"
+
+app_include_css = "/assets/selvi_hospital/css/batch_dropdown.css"
+
+
+override_doctype_class = {
+    "Medicine Return": "selvi_hospital.selvi_hospital_custom_app.doctype.medicine_return.medicine_return.MedicineReturn"
+}
+
+
+# Medicine Return Custom DocType event handlers
+doc_events.setdefault("Medicine Return", {}).update({
+    "validate": "selvi_hospital.selvi_hospital_custom_app.doctype.medicine_return.medicine_return.medicine_return_validate",
+    "on_submit": "selvi_hospital.selvi_hospital_custom_app.doctype.medicine_return.medicine_return.medicine_return_on_submit",
+    "on_cancel": "selvi_hospital.selvi_hospital_custom_app.doctype.medicine_return.medicine_return.medicine_return_on_cancel",
+})

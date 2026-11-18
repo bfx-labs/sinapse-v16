@@ -1,0 +1,131 @@
+{
+ "doctype": "DocType",
+ "name": "Medicine Return",
+ "module": "Selvi Hospital Custom App",
+ "custom": 1,
+ "is_submittable": 1,
+ "autoname": "naming_series:",
+ "engine": "InnoDB",
+ "track_changes": 1,
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "label": "Series",
+   "fieldtype": "Select",
+   "options": "MR-.YYYY.-.#####",
+   "default": "MR-.YYYY.-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "company",
+   "label": "Company",
+   "fieldtype": "Link",
+   "options": "Company",
+   "default": "Selvi Hospital",
+   "reqd": 1
+  },
+  {
+   "fieldname": "return_date",
+   "label": "Return Date",
+   "fieldtype": "Date",
+   "default": "Today",
+   "reqd": 1
+  },
+  {
+   "fieldname": "patient_section",
+   "label": "Patient Details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "patient_name",
+   "label": "Patient Name",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "mobile_number",
+   "label": "Mobile Number",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "original_purchase_reference",
+   "label": "Original Purchase Reference",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "refund_section",
+   "label": "Refund Details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "refund_mode",
+   "label": "Refund Mode",
+   "fieldtype": "Select",
+   "options": "\nCash\nUPI\nBank",
+   "reqd": 1
+  },
+  {
+   "fieldname": "refund_account",
+   "label": "Refund Payment Account",
+   "fieldtype": "Link",
+   "options": "Account",
+   "default": "Cash - SH",
+   "reqd": 1
+  },
+  {
+   "fieldname": "items_section",
+   "label": "Returned Medicines",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "label": "Items",
+   "fieldtype": "Table",
+   "options": "Medicine Return Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_refund",
+   "label": "Total Refund",
+   "fieldtype": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accounting_section",
+   "label": "Generated Entries",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "stock_entry",
+   "label": "Stock Entry",
+   "fieldtype": "Link",
+   "options": "Stock Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "journal_entry",
+   "label": "Journal Entry",
+   "fieldtype": "Link",
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "label": "Remarks",
+   "fieldtype": "Small Text"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "All",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 1,
+   "print": 1,
+   "email": 1,
+   "export": 1,
+   "report": 1
+  }
+ ]
+}

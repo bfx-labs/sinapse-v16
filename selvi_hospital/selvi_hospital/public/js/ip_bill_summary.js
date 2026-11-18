@@ -13,8 +13,7 @@ frappe.ui.form.on("IP Bill Summary", {
                     } else {
                         frappe.msgprint(__("The invoice import dialog did not load. Refresh the page and try again."));
                     }
-                },
-                __("Billing")
+                }
             );
         }
         if (
@@ -209,7 +208,16 @@ frappe.ui.form.on("IP Bill Summary", {
         }
     },
 
-discount(frm) {
+    consolidated_sales_invoice(frm) {
+        if (frm.__ip_summary_setting_invoice) return;
+
+        if (frm.doc.consolidated_sales_invoice) {
+            frm.__ip_summary_loaded = false;
+            load_ip_bill_summary(frm);
+        }
+    },
+
+    discount(frm) {
         calculate_final_payable_amount(frm);
     },
 
@@ -262,17 +270,57 @@ async function load_ip_bill_summary(frm) {
         frm.__ip_summary_request_id === requestId;
 
     try {
-        const response = await frappe.call({
+        const invoiceFromRoute = frappe.route_options?.source_invoice;
+
+        let response = await frappe.call({
             method: "selvi_hospital.sales_invoice.get_ip_bill_summary_data",
             args: {
-                inpatient_record: frm.doc.inpatient_record
+                inpatient_record: frm.doc.inpatient_record,
+                source_invoice: frm.doc.consolidated_sales_invoice || invoiceFromRoute || "",
+                consolidated_sales_invoice:
+                    frm.doc.consolidated_sales_invoice || invoiceFromRoute || ""
             }
         });
 
         if (!isCurrentRequest()) return;
 
-        const data = response.message;
+        let data = response.message;
         if (!data) throw new Error("The summary API returned no data.");
+
+        // Automatically select the invoice when exactly one is linked.
+        const selectedInvoice =
+            frm.doc.consolidated_sales_invoice ||
+            invoiceFromRoute ||
+            (data.invoices?.length === 1 ? data.invoices[0].name : "");
+
+        if (selectedInvoice) {
+            if (frm.doc.consolidated_sales_invoice !== selectedInvoice) {
+                frm.__ip_summary_setting_invoice = true;
+                try {
+                    await frm.set_value(
+                        "consolidated_sales_invoice",
+                        selectedInvoice
+                    );
+                } finally {
+                    frm.__ip_summary_setting_invoice = false;
+                }
+            }
+
+            response = await frappe.call({
+                method: "selvi_hospital.sales_invoice.get_ip_bill_summary_data",
+                args: {
+                    inpatient_record: frm.doc.inpatient_record,
+                    source_invoice: selectedInvoice,
+                    consolidated_sales_invoice: selectedInvoice
+                }
+            });
+
+            if (!isCurrentRequest()) return;
+
+            data = response.message;
+            if (!data) throw new Error("The selected invoice returned no data.");
+        }
+
         await frm.set_value("patient", data.patient || "");
         await frm.set_value("patient_name", data.patient_name || "");
         await frm.set_value("inpatient_record", data.inpatient_record || "");
@@ -281,8 +329,21 @@ async function load_ip_bill_summary(frm) {
 
         if (!isCurrentRequest()) return;
 
+        // Source Sales Invoices table was removed from IP Bill Summary.
 
-if (!isCurrentRequest()) return;
+        await frm.set_value(
+            "room_charges",
+            flt(data.room_charges)
+        );
+        await frm.set_value(
+            "medicines_consumables",
+            flt(data.medicines_consumables)
+        );
+        // GST is intentionally excluded from Grand Total for now.
+        await frm.set_value("amount_paid", flt(data.amount_paid));
+        await frm.set_value("balance_due", flt(data.balance_due));
+
+        if (!isCurrentRequest()) return;
 
         const chargeFields = [
             "theatre_charges",

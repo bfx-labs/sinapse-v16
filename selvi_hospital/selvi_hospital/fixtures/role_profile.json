@@ -2,6 +2,153 @@
  {
   "docstatus": 0,
   "doctype": "Role Profile",
+  "modified": "2026-02-17 15:54:02.258984",
+  "name": "Inventory",
+  "role_profile": "Inventory",
+  "roles": [
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Item Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-02-17 15:54:02.263811",
+  "name": "Manufacturing",
+  "role_profile": "Manufacturing",
+  "roles": [
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Manufacturing User"
+   },
+   {
+    "role": "Manufacturing Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-02-17 15:54:02.268477",
+  "name": "Accounts",
+  "role_profile": "Accounts",
+  "roles": [
+   {
+    "role": "Accounts User"
+   },
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-02-17 15:54:02.273907",
+  "name": "Sales",
+  "role_profile": "Sales",
+  "roles": [
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Sales Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-02-17 15:54:02.279076",
+  "name": "Purchase",
+  "role_profile": "Purchase",
+  "roles": [
+   {
+    "role": "Item Manager"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Purchase User"
+   },
+   {
+    "role": "Purchase Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-03-19 11:48:32.398742",
+  "name": "Selvi Hospital Staff",
+  "role_profile": " Selvi Hospital Staff",
+  "roles": [
+   {
+    "role": "Nursing User"
+   },
+   {
+    "role": "Patient"
+   },
+   {
+    "role": "Physician"
+   },
+   {
+    "role": "Healthcare Administrator"
+   },
+   {
+    "role": "Laboratory User"
+   },
+   {
+    "role": "LabTest Approver"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-03-19 12:27:13.436665",
+  "name": "S Staff",
+  "role_profile": "S Staff",
+  "roles": [
+   {
+    "role": "Patient"
+   },
+   {
+    "role": "Nursing User"
+   },
+   {
+    "role": "Physician"
+   },
+   {
+    "role": "Laboratory User"
+   },
+   {
+    "role": "LabTest Approver"
+   },
+   {
+    "role": "Maintenance User"
+   },
+   {
+    "role": "Healthcare Administrator"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
   "modified": "2026-09-18 20:11:24.766610",
   "name": "Pharmacist",
   "role_profile": "Pharmacist",
@@ -92,7 +239,7 @@
  {
   "docstatus": 0,
   "doctype": "Role Profile",
-  "modified": "2026-09-25 11:13:14.294541",
+  "modified": "2026-09-15 09:01:10.547348",
   "name": "Super Admin",
   "role_profile": "Super Admin",
   "roles": [
@@ -116,6 +263,9 @@
    },
    {
     "role": "Customer"
+   },
+   {
+    "role": "Dashboard Manager"
    },
    {
     "role": "Delivery Manager"
@@ -253,10 +403,13 @@
     "role": "Translator"
    },
    {
-    "role": "Super Admin"
+    "role": "Website Manager"
    },
    {
-    "role": "Nursing Staff"
+    "role": "Workspace Manager"
+   },
+   {
+    "role": "Super Admin"
    }
   ]
  },
@@ -335,7 +488,19 @@
  {
   "docstatus": 0,
   "doctype": "Role Profile",
-  "modified": "2026-09-14 00:14:44.739876",
+  "modified": "2026-10-09 11:55:49.278294",
+  "name": "Nursing Staff Only",
+  "role_profile": "Nursing Staff Only",
+  "roles": [
+   {
+    "role": "Nursing Staff"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-03 12:51:46.842241",
   "name": "Doctor",
   "role_profile": "Doctor",
   "roles": [
@@ -356,6 +521,96 @@
    },
    {
     "role": "Laboratory User"
+   },
+   {
+    "role": "Doctor Workspace Access"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-18 09:01:32.001848",
+  "name": "Nursing Staff",
+  "role_profile": "Nurse Staff",
+  "roles": [
+   {
+    "role": "Patient"
+   },
+   {
+    "role": "Physician"
+   },
+   {
+    "role": "Laboratory User"
+   },
+   {
+    "role": "LabTest Approver"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Maintenance User"
+   },
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "Purchase Manager"
+   },
+   {
+    "role": "Nursing User"
+   },
+   {
+    "role": "Front Office"
+   },
+   {
+    "role": "Employee"
+   },
+   {
+    "role": "Doctor"
+   },
+   {
+    "role": "Customer"
+   },
+   {
+    "role": "Delivery User"
+   },
+   {
+    "role": "Employee Self Service"
+   },
+   {
+    "role": "Fulfillment User"
+   },
+   {
+    "role": "HR User"
+   },
+   {
+    "role": "Inbox User"
+   },
+   {
+    "role": "Manufacturing User"
+   },
+   {
+    "role": "Purchase User"
+   },
+   {
+    "role": "Support Team"
+   },
+   {
+    "role": "Supplier"
+   },
+   {
+    "role": "pharmacist"
+   },
+   {
+    "role": "Nursing Staff"
+   },
+   {
+    "role": "Accounts User"
    }
   ]
  }

@@ -18,16 +18,11 @@ frappe.ui.form.on("Inpatient Record", {
                     }
 
                     // No saved summary: open a NEW, UNSAVED form.
-                    const activeOccupancies = (frm.doc.inpatient_occupancies || [])
-                        .filter(row => !row.left && !row.check_out);
-                    const currentOccupancy = activeOccupancies.length
-                        ? activeOccupancies[activeOccupancies.length - 1]
-                        : null;
                     frappe.new_doc("IP Bill Summary", {
                         patient: frm.doc.patient,
                         patient_name: frm.doc.patient_name,
                         inpatient_record: frm.doc.name,
-                        room_no: currentOccupancy?.service_unit || "",
+                        room_no: frm.doc.inpatient_occupancy,
                         bill_date: frappe.datetime.get_today()
                     });
                 }
